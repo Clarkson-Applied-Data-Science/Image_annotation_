@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+<div>
+    {{ msg }}<br>
+
+    {% if go == "login" %}
+        <a href="/login">Continue</a>
+    {% else %}
+        <a href="/main">Continue</a>
+    {% endif %}
+</div>
+</section>
+{% endblock %}

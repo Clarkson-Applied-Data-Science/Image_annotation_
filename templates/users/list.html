@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+    <h1>Users</h1>
+    
+	<br><br>
+
+	            <div>
+                
+
+                <div> <a href="manage?pkval=new">Create new</a> </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Edit</th>
+                            <th>Email</th>
+                            <th>Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for obj in obj.data  %}
+                        <tr>
+                            <td><a href="manage?pkval={{ obj.UID }}">Edit</a></td>
+                            <td>{{ obj.email }}</td>
+                            <td>{{ obj.name }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+               
+            </div>
+	
+	
+</section>	
+{% endblock %}

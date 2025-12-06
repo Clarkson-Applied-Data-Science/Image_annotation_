@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+<h2>Edit Label</h2>
+
+<div style="display:flex; gap:30px;">
+
+    <!-- IMAGE PREVIEW -->
+    <div>
+        <img src="/{{ label.Image_path }}" 
+             style="max-width:250px; border:1px solid #ccc; border-radius:5px;">
+        <p><strong>Project:</strong> {{ label.Project_name }}</p>
+    </div>
+
+    <!-- EDIT FORM -->
+    <div style="flex:1;">
+        <form method="POST">
+
+            <label>Label Name</label>
+            <input type="text" name="L_Name" 
+                   value="{{ label.L_Name }}" class="form-control" required>
+
+            <label>Description</label>
+            <textarea name="Description" class="form-control" rows="4">{{ label.Description }}</textarea>
+
+            <br>
+            <button class="btn btn-primary">Save Changes</button>
+        </form>
+
+        <br>
+
+        {% if me.role == 'admin' %}
+            <a href="/labels/delete/{{ label.Label_ID }}" 
+               style="color:red;"
+               onclick="return confirm('Delete this label?');">Delete Label</a>
+        {% endif %}
+    </div>
+
+</div>
+
+<br>
+<a href="/search">← Back to Search</a>
+</section>
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="card">
+<h1>Admin Analytics Dashboard</h1>
+
+<hr>
+<h2> Per-Project Annotation Stats</h2>
+<table class="table table-bordered">
+    <tr>
+        <th>Project</th>
+        <th>Total Images</th>
+        <th>Labeled Images</th>
+        <th>Last Upload Time</th>
+    </tr>
+   {% for p in project_stats %}
+<tr>
+    <td>{{ p.Project_name }}</td>
+    <td>{{ p.total_images }}</td>
+    <td>{{ p.labeled }}</td>
+    <td>{{ p.last_upload or 'N/A' }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<hr>
+<h2> Top Annotators</h2>
+<table class="table table-bordered">
+    <tr>
+        <th>User</th>
+        <th>Total Labels</th>
+    </tr>
+    {% for u in top_users %}
+    <tr>
+        <td>{{ u.name }}</td>
+        <td>{{ u.total_labels }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+<h2> Most Common Labels</h2>
+<table class="table table-bordered">
+    <tr>
+        <th>Label</th>
+        <th>Count</th>
+    </tr>
+    {% for l in freq %}
+    <tr>
+        <td>{{ l.L_Name }}</td>
+        <td>{{ l.count }}</td>
+    </tr>
+    {% endfor %}
+</table>
+</section>
+{% endblock %}

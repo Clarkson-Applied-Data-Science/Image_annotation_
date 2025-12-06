@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+<h1>{{ project.Project_name }}</h1>
+<p><b>Folder:</b> static/uploads/{{ project.Project_ID }}/</p>
+
+<!-- Annotation Workflow Button -->
+<div style="margin:10px 0;">
+    <a href="/annotate/project/{{ project.Project_ID }}" 
+       class="btn btn-primary">
+         Start Annotation Workflow
+    </a>
+</div>
+
+<hr>
+
+{% if images|length == 0 %}
+    <p>No images uploaded in this project.</p>
+{% else %}
+    <div style="display:flex; flex-wrap:wrap; gap:20px;">
+
+        {% for img in images %}
+        <div style="
+            width:230px;
+            border:1px solid #ddd;
+            padding:10px;
+            border-radius:8px;
+            background:#fafafa;
+        ">
+            <p><b>ID:</b> {{ img.Image_ID }}</p>
+
+            <img src="/{{ img.Image_path }}"
+                 style="width:210px; height:210px; object-fit:cover; border-radius:6px;">
+
+            <p style="font-size:12px; margin-top:5px;">
+                {{ img.Image_path.split('/')[-1] }}
+            </p>
+
+            {% if img.has_label == 0 %}
+                <span style="color:red;">Not Annotated</span><br>
+                <!--<a href="/annotate/project/{{ img.Image_ID }}" 
+                   class="btn btn-warning" style="margin-top:5px;">
+                    Annotate
+                </a>-->
+            {% else %}
+                <span style="color:green;">Annotated</span><br>
+                <a href="/labels/edit/{{ img.Label_ID }}" 
+                   class="btn btn-info" style="margin-top:5px;">
+                    Edit Label
+                </a>
+            {% endif %}
+
+        </div>
+        {% endfor %}
+
+    </div>
+{% endif %}
+
+<br>
+<div style="margin-top:20px;">
+
+    {% if page > 1 %}
+    <a class="btn btn-secondary" href="?page={{ page - 1 }}">Previous</a>
+    {% endif %}
+
+    Page {{ page }} of {{ total_pages }}
+
+    {% if page < total_pages %}
+    <a class="btn btn-secondary" href="?page={{ page + 1 }}">Next</a>
+    {% endif %}
+
+</div>
+
+<a href="/images/list">← Back to Project List</a>
+
+</section>
+{% endblock %}

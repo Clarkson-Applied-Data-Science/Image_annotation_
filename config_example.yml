@@ -1,0 +1,13 @@
+db:
+  user: 'x'
+  pw: 'x'
+  host: 'mysql.host.org'
+  db: 'x'
+
+
+
+tables:
+  user: 'users'
+  project: 'project'
+  images: 'images'
+  label: 'labels'

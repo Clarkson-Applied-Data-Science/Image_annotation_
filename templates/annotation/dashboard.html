@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+<h1>Annotation Dashboard</h1>
+<hr>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Project</th>
+        <th>Total Images</th>
+        <th>Unlabeled</th>
+        <th>Action</th>
+    </tr>
+
+    {% for row in stats %}
+    <tr>
+        <td>{{ row.Project_name }}</td>
+        <td>{{ row.total }}</td>
+        <td>
+            {% if row.unlabeled == 0 %}
+                <span style="color: green;">All Done</span>
+            {% else %}
+                <b>{{ row.unlabeled }}</b>
+            {% endif %}
+        </td>
+        <td>
+            {% if row.unlabeled == 0 %}
+                Completed
+            {% else %}
+                <a href="/annotate/project/{{ row.Project_ID }}" class="btn btn-primary">
+                    Start Annotating
+                </a>
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="/main">← Back</a>
+</section>
+{% endblock %}

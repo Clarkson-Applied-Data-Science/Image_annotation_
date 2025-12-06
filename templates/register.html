@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+<h2>Create Account</h2>
+
+{% if obj and obj.errors %}
+<div class="alert alert-danger">
+    <ul>
+        {% for e in obj.errors %}
+            <li>{{ e }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<form method="POST">
+    <label>Name</label>
+    <input type="text" name="name" class="form-control" required>
+
+    <label>Email</label>
+    <input type="email" name="email" class="form-control" required>
+
+    <label>Password</label>
+    <input type="password" name="password" class="form-control" required>
+
+    <label>Confirm Password</label>
+    <input type="password" name="password2" class="form-control" required>
+
+    <br>
+    <button class="btn btn-success">Register</button>
+</form>
+
+<a href="/login">Already have an account? Log in</a>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      {% if title %}
+      <title>{{ title }} - Home</title>
+      {% else %}
+      <title>Welcome to my example</title>
+      {% endif %}
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body class="auth-body">
+        <main class="auth-container">
+            {% block content %}{% endblock %}
+        </main>
+    </body>
+</html>

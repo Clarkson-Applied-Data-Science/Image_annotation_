@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+<h2>Projects</h2>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Project Name</th>
+        <th>Total Images</th>
+        <th>Unlabeled</th>
+        <th>View</th>
+        <th>Annotate</th>
+        <th>Export</th>   <!-- NEW COLUMN -->
+    </tr>
+
+    {% for p in projects %}
+    <tr>
+        <td>{{ p.Project_name }}</td>
+        <td>{{ p.total }}</td>
+
+        <td>
+            {% if p.unlabeled > 0 %}
+                <span style="color:red;">{{ p.unlabeled }}</span>
+            {% else %}
+                <span style="color:green;">0</span>
+            {% endif %}
+        </td>
+
+        <!-- VIEW IMAGES -->
+        <td>
+            <a href="/images/view/{{ p.Project_ID }}" class="btn btn-secondary btn-sm">
+                View Images
+            </a>
+        </td>
+
+        <!-- ANNOTATE -->
+        <td>
+            {% if p.unlabeled > 0 %}
+                <a href="/annotate/project/{{ p.Project_ID }}" class="btn btn-primary btn-sm">
+                    Annotate
+                </a>
+            {% else %}
+                <button class="btn btn-success btn-sm" disabled>
+                    Completed
+                </button>
+            {% endif %}
+        </td>
+
+        <!-- EXPORT OPTIONS -->
+        <td>
+            <a href="/export/project/{{ p.Project_ID }}/csv" class="btn btn-success btn-sm">CSV</a>
+            <a href="/export/project/{{ p.Project_ID }}/json" class="btn btn-info btn-sm">JSON</a>
+            <a href="/export/project/{{ p.Project_ID }}/zip" class="btn btn-dark btn-sm">ZIP</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</section>
+{% endblock %}

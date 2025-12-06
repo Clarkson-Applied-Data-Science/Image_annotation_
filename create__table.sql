@@ -1,0 +1,27 @@
+CREATE TABLE users (
+  UID INT AUTO_INCREMENT PRIMARY KEY,
+  Username VARCHAR(255),
+  Password VARCHAR(255)
+);
+
+CREATE TABLE project (
+  Project_ID INT AUTO_INCREMENT PRIMARY KEY,
+  Project_name VARCHAR(255)
+);
+
+CREATE TABLE images (
+  Image_ID INT AUTO_INCREMENT PRIMARY KEY,
+  Image_path VARCHAR(255),
+  Date_added DATETIME,
+  Project_ID INT,
+  FOREIGN KEY (Project_ID) REFERENCES project(Project_ID)
+);
+
+CREATE TABLE labels (
+  Label_ID INT AUTO_INCREMENT PRIMARY KEY,
+  L_Name VARCHAR(255),
+  UID INT,
+  Image_ID INT,
+  FOREIGN KEY (UID) REFERENCES users(UID),
+  FOREIGN KEY (Image_ID) REFERENCES images(Image_ID)
+);

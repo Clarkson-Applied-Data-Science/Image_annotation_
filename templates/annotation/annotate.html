@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+<h2>Annotate Image</h2>
+<h4 style="color:#555;">Project: <b>{{ project_name }}</b></h4>
+
+<div style="margin:20px 0;">
+    <img src="/{{ image.Image_path }}" width="400"
+         style="border:1px solid #ccc; border-radius:8px;">
+</div>
+
+<form action="/annotate/save" method="POST">
+
+    <input type="hidden" name="image_id" value="{{ image.Image_ID }}">
+    <input type="hidden" name="project_id" value="{{ project_id }}">
+
+    <label>Label Name</label>
+    <input type="text" name="label_name" class="form-control" required>
+
+    <label>Description</label>
+    <textarea name="description" class="form-control" rows="4" required></textarea>
+
+    <br>
+    <button class="btn btn-success">Save & Next</button>
+</form>
+
+<br>
+<a href="/annotate">← Back to Dashboard</a>
+</section>
+{% endblock %}

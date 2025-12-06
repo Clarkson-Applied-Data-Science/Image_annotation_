@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+
+<h1>Main menu</h1>
+
+<div id="menumsg">
+    Hello, {{ me.name }} ({{ me.UID }}, {{ me.role }})
+</div>
+
+<br><br>
+
+{% if me.role == 'admin' %}
+    <a href="/users/manage">Manage Users</a><br>
+{% endif %}
+
+<a href="/images/upload">Upload Images</a><br>
+<a href="/images/list">List Images</a><br>
+
+
+
+
+<!-- BOTH admin + customer see this -->
+<a href="/search">Search </a><br>
+
+<!--{% if me.role == 'admin' %}
+    <a href="/projects">Manage Projects</a><br>
+{% endif %}-->
+
+{% if me.role == "admin" %}
+    <a class="btn btn-primary" href="/admin/dashboard">Admin Dashboard</a>
+{% endif %}
+
+<br>
+
+
+<a href="/logout">Logout</a><br>
+
+{% endblock %}

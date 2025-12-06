@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="card">
+<h1>Upload Images</h1>
+
+<form action="{{ url_for('upload_image') }}" method="POST" enctype="multipart/form-data">
+
+    <!-- PROJECT NAME WITH AUTOCOMPLETE -->
+    <label>Project Name</label>
+    <input type="text" name="project_name" id="project_name"
+           class="form-control" autocomplete="off" required>
+
+    <!-- AUTOCOMPLETE BOX -->
+    <div id="autocomplete-list"
+         style="border:1px solid #ccc; display:none; position:absolute;
+                background:white; z-index:999; width:300px;">
+    </div>
+
+    <br>
+
+    <!-- MULTIPLE IMAGE INPUT -->
+    <label>Select Images</label>
+    <input type="file" name="images" class="form-control" multiple required>
+
+    <br>
+    <button class="btn btn-success">Upload Images</button>
+</form>
+
+<br>
+<a href="/main">← Back</a>
+
+
+<!-- AUTOCOMPLETE SCRIPT -->
+<script>
+const input = document.getElementById("project_name");
+const listBox = document.getElementById("autocomplete-list");
+
+input.addEventListener("input", function () {
+    const term = this.value.trim();
+    if (term.length < 1) { listBox.style.display = "none"; return; }
+
+    fetch("/projects/search?term=" + encodeURIComponent(term))
+        .then(r => r.json())
+        .then(data => {
+            listBox.innerHTML = "";
+            if (data.length === 0) { listBox.style.display = "none"; return; }
+
+            data.forEach(item => {
+                const div = document.createElement("div");
+                div.style.padding = "5px";
+                div.style.cursor = "pointer";
+                div.innerText = item;
+                div.onclick = () => { input.value = item; listBox.style.display = "none"; };
+                listBox.appendChild(div);
+            });
+
+            listBox.style.display = "block";
+        });
+});
+
+document.addEventListener("click", function(e) {
+    if (!listBox.contains(e.target) && e.target !== input) {
+        listBox.style.display = "none";
+    }
+});
+</script>
+</section>
+{% endblock %}

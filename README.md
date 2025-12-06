@@ -11,7 +11,7 @@ This is my app
 ---
 
 ## Relational Schema
-![Alt text](docs/edrplus.jpg "this is the relational schema ")
+![Alt text](docs/edrplus.jpeg "this is the relational schema ")
 
 ## App Purpose & Narrative
 

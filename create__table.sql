@@ -1,8 +1,13 @@
 CREATE TABLE users (
   UID INT AUTO_INCREMENT PRIMARY KEY,
   Username VARCHAR(255),
+  email VARCHAR(255),
+  role VARCHAR(50),
   Password VARCHAR(255)
 );
+
+
+
 
 CREATE TABLE project (
   Project_ID INT AUTO_INCREMENT PRIMARY KEY,

@@ -9,6 +9,33 @@ This is my app
 - Pooja Joijode
 
 ---
+## Initialization Scripts
+
+This project uses separate initialization files for the database and the Python app:
+
+- `create_table.sql`  
+  SQL script that only **creates the tables** without inserting any demo rows.  
+  Use this if you want a clean, empty database and plan to upload your own projects/images.
+
+- `init.sql`  
+  SQL script that **creates** the main tables (`users`, `project`, `images`, `labels`) and also **inserts sample data** (projects, images, labels with timestamps).  
+  Run this on your MySQL database so the app has data to show on first run.
+
+
+- `init.py`  
+  Python initialization module for the application. This file is part of the project package and is imported when the app starts; it can be used for common setup logic and shared configuration.
+
+### How to initialize the database
+
+1. Create a MySQL database for the app.
+2. Run **either**:
+   - `create_table.sql` – creates tables only.
+3. Update your `config.yml` (from `config_example.yml`) with the correct DB name, user, and password.
+4. Start the Flask app:
+
+   ```bash
+   python app.py
+
 
 ## Relational Schema
 

@@ -5,12 +5,10 @@
 
 <form action="{{ url_for('upload_image') }}" method="POST" enctype="multipart/form-data">
 
-    <!-- PROJECT NAME WITH AUTOCOMPLETE -->
     <label>Project Name</label>
     <input type="text" name="project_name" id="project_name"
            class="form-control" autocomplete="off" required>
 
-    <!-- AUTOCOMPLETE BOX -->
     <div id="autocomplete-list"
          style="border:1px solid #ccc; display:none; position:absolute;
                 background:white; z-index:999; width:300px;">
@@ -18,7 +16,6 @@
 
     <br>
 
-    <!-- MULTIPLE IMAGE INPUT -->
     <label>Select Images</label>
     <input type="file" name="images" class="form-control" multiple required>
 
@@ -30,7 +27,6 @@
 <a href="/main">← Back</a>
 
 
-<!-- AUTOCOMPLETE SCRIPT -->
 <script>
 const input = document.getElementById("project_name");
 const listBox = document.getElementById("autocomplete-list");

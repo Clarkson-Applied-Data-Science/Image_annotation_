@@ -72,12 +72,9 @@ class user(baseObject):
             return False
     
     def tryLogin(self,un, pw):
-        #print(un,pw)
         pw = self.hashPassword(pw)
-        #print(un,pw)
         self.data = []
         sql = f'''SELECT * FROM `{self.tn}` WHERE `email` = %s AND `password` = %s;'''
-        #print(sql,[un,pw])
         self.cur.execute(sql,[un,pw])
         for row in self.cur:
             self.data.append(row)

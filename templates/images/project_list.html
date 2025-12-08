@@ -10,7 +10,7 @@
         <th>Unlabeled</th>
         <th>View</th>
         <th>Annotate</th>
-        <th>Export</th>   <!-- NEW COLUMN -->
+        <th>Export</th>   
     </tr>
 
     {% for p in projects %}
@@ -26,14 +26,12 @@
             {% endif %}
         </td>
 
-        <!-- VIEW IMAGES -->
         <td>
             <a href="/images/view/{{ p.Project_ID }}" class="btn btn-secondary btn-sm">
                 View Images
             </a>
         </td>
 
-        <!-- ANNOTATE -->
         <td>
             {% if p.unlabeled > 0 %}
                 <a href="/annotate/project/{{ p.Project_ID }}" class="btn btn-primary btn-sm">
@@ -46,7 +44,6 @@
             {% endif %}
         </td>
 
-        <!-- EXPORT OPTIONS -->
         <td>
             <a href="/export/project/{{ p.Project_ID }}/csv" class="btn btn-success btn-sm">CSV</a>
             <a href="/export/project/{{ p.Project_ID }}/json" class="btn btn-info btn-sm">JSON</a>

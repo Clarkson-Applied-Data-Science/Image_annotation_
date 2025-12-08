@@ -20,7 +20,6 @@
             <th>Project</th>
             <th>Image</th>
             <th>User</th>
-            <!--<th>Action</th>-->
         </tr>
 
         {% for r in results %}
@@ -29,7 +28,6 @@
             <td>{{ r.Description }}</td>
             <td>{{ r.Project_name }}</td>
 
-            <!--  IMAGE PREVIEW ADDED HERE  -->
             <td>
                 <img src="/{{ r.Image_path }}" 
                      style="width:120px; height:auto; border:1px solid #ccc; cursor:pointer;"
@@ -38,15 +36,7 @@
 
             <td>{{ r.user_name }}</td>
 
-           <!-- <td>
-                {% if me.role == 'admin' or me.UID == r.UID %}
-                    <a href="/labels/edit/{{ r.Label_ID }}">Edit Label</a>
-                {% endif %}
-
-                {% if me.role == 'admin' %}
-                    | <a href="/projects/edit/{{ r.Project_ID }}">Edit Project</a>
-                {% endif %}
-            </td>-->
+          
         </tr>
         {% endfor %}
     </table>
@@ -56,7 +46,6 @@
     {% endif %}
 {% endif %}
 
-<!--  POPUP IMAGE VIEWER  -->
 <script>
 function openImage(path) {
     const w = window.open("", "_blank");

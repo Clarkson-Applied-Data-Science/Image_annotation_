@@ -10,22 +10,17 @@ class baseObject:
         self.pk = None
         self.errors = []
 
-        # If no path is given, load config.yml from the same directory
-        # where this file (baseObject.py) lives.
+
         if config_path is None:
             base_dir = Path(__file__).resolve().parent
             config_path = base_dir / "config.yml"
 
-        # store as string for pymysql etc.
         self.config_path = str(config_path)
 
-        # read the YAML config
         self.config = yaml.safe_load(Path(self.config_path).read_text())
 
-        # table name for this subclass
         self.tn = self.config['tables'][type(self).__name__]
 
-        # DB connection
         self.conn = pymysql.connect(
             host=self.config['db']['host'],
             port=3306,

@@ -4,14 +4,11 @@
         <meta charset="UTF-8">
         <title>{% block title %}App{% endblock %}</title>
 
-        <!-- Correct static path -->
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-        <!-- Keep your Plotly include if you need it -->
         <script src="{{ url_for('static', filename='plotly-2.35.2.min.js') }}"></script>
     </head>
     <body>
-        <!-- Top bar visible on all pages that extend base.html -->
         <header class="top-bar">
             <div class="container top-bar-inner">
                 <a href="/main" class="brand">Image Annotation Tool</a>
@@ -25,7 +22,6 @@
             </div>
         </header>
 
-        <!-- Main page content -->
         <main class="container page">
             {% block content %}{% endblock %}
         </main>

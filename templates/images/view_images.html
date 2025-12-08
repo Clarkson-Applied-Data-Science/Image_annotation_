@@ -4,7 +4,6 @@
 <h1>{{ project.Project_name }}</h1>
 <p><b>Folder:</b> static/uploads/{{ project.Project_ID }}/</p>
 
-<!-- Annotation Workflow Button -->
 <div style="margin:10px 0;">
     <a href="/annotate/project/{{ project.Project_ID }}" 
        class="btn btn-primary">
@@ -38,10 +37,7 @@
 
             {% if img.has_label == 0 %}
                 <span style="color:red;">Not Annotated</span><br>
-                <!--<a href="/annotate/project/{{ img.Image_ID }}" 
-                   class="btn btn-warning" style="margin-top:5px;">
-                    Annotate
-                </a>-->
+                
             {% else %}
                 <span style="color:green;">Annotated</span><br>
                 <a href="/labels/edit/{{ img.Label_ID }}" 

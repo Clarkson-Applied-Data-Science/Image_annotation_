@@ -13,9 +13,7 @@ from label import label
 
 UPLOAD_FOLDER = "static/uploads"
 
-# ---------------------------------------------------------
-#   APP SETUP
-# ---------------------------------------------------------
+
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
@@ -29,9 +27,6 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 Session(app)
 
 
-# ---------------------------------------------------------
-#   SESSION + HOME
-# ---------------------------------------------------------
 @app.route("/")
 def home():
     return redirect("/login")
@@ -42,9 +37,7 @@ def inject_user():
     return dict(me=session.get("user"))
 
 
-# ---------------------------------------------------------
-#   LOGIN
-# ---------------------------------------------------------
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     un = request.form.get("name")
@@ -68,9 +61,6 @@ def logout():
     return render_template("login.html", msg="You have logged out.")
 
 
-# ---------------------------------------------------------
-#   USERS CRUD
-# ---------------------------------------------------------
 @app.route("/users/manage", methods=["GET", "POST"])
 def manage_user():
     if not checkSession(): return redirect("/login")
@@ -79,12 +69,10 @@ def manage_user():
     action = request.args.get("action")
     pkval = request.args.get("pkval")
 
-    # DELETE
     if action == "delete":
         o.deleteById(pkval)
         return render_template("ok_dialog.html", msg=f"Record ID {pkval} deleted.")
 
-    # INSERT
     if action == "insert":
         d = {
             "name": request.form.get("name"),
@@ -100,7 +88,6 @@ def manage_user():
         else:
             return render_template("users/add.html", obj=o)
 
-    # UPDATE
     if action == "update":
         o.getById(pkval)
         o.data[0]["name"] = request.form.get("name")
@@ -115,47 +102,29 @@ def manage_user():
         else:
             return render_template("users/manage.html", obj=o)
 
-    # LIST
     if pkval is None:
         o.getAll()
         return render_template("users/list.html", obj=o)
 
-    # ADD NEW
     if pkval == "new":
         o.createBlank()
         return render_template("users/add.html", obj=o)
 
-    # EDIT
     o.getById(pkval)
     return render_template("users/manage.html", obj=o)
 
 
-# ---------------------------------------------------------
-#   MAIN PAGE
-# ---------------------------------------------------------
 @app.route("/main")
 def main():
     if not checkSession(): return redirect("/login")
     return render_template("main.html")
 
 
-# ---------------------------------------------------------
-#   STATIC ROUTE
-# ---------------------------------------------------------
 @app.route("/static/<path:path>")
 def send_static(path):
     return send_from_directory("static", path)
 
 
-# ---------------------------------------------------------
-#   IMAGE UPLOAD
-# ---------------------------------------------------------
-# ---------------------------------------------------------
-#   MULTIPLE IMAGE UPLOAD
-# ---------------------------------------------------------
-# ---------------------------------------------------------
-#   MULTIPLE IMAGE UPLOAD (NO LABELS HERE)
-# ---------------------------------------------------------
 @app.route("/images/upload", methods=["GET", "POST"])
 def upload_image():
     if not checkSession():
@@ -165,18 +134,16 @@ def upload_image():
 
     if request.method == "POST":
 
-        # MULTIPLE FILES
         files = request.files.getlist("images")
         project_name = request.form.get("project_name")
 
-        # VALIDATION
+        
         if len(files) == 0:
             return render_template("error.html", msg="No files selected")
 
         if not project_name or project_name.strip() == "":
             return render_template("error.html", msg="Project name is required")
 
-        # LOOKUP OR CREATE PROJECT
         from project import project
         proj = project()
         proj.getByField("Project_name", project_name)
@@ -188,12 +155,10 @@ def upload_image():
             proj.insert()
             project_id = proj.data[0]["Project_ID"]
 
-        # CREATE PROJECT FOLDER
         project_folder = os.path.join(UPLOAD_FOLDER, str(project_id))
         if not os.path.exists(project_folder):
             os.makedirs(project_folder)
 
-        # SAVE ALL FILES
         saved_count = 0
 
         for file in files:
@@ -204,7 +169,6 @@ def upload_image():
             filepath = os.path.join(project_folder, filename).replace("\\", "/")
             file.save(filepath)
 
-            # insert image record
             img = images()
             img.set({
                 "Image_path": filepath,
@@ -221,10 +185,6 @@ def upload_image():
 
 
 
-
-# ---------------------------------------------------------
-#   PROJECT SEARCH (AUTOCOMPLETE)
-# ---------------------------------------------------------
 @app.route("/projects/search")
 def project_search():
     term = request.args.get("term", "").strip()
@@ -242,9 +202,6 @@ def project_search():
     return jsonify([row["Project_name"] for row in p.cur])
 
 
-# ---------------------------------------------------------
-#   PROJECT LIST
-# ---------------------------------------------------------
 @app.route("/images/list")
 def images_list():
     if not checkSession(): 
@@ -282,11 +239,6 @@ def images_list():
 
     return render_template("images/project_list.html", projects=stats)
 
-
-
-# ---------------------------------------------------------
-#   VIEW IMAGES WITH ANNOTATION STATUS
-# ---------------------------------------------------------
 @app.route("/images/view/<pid>")
 def images_view(pid):
     if not checkSession():
@@ -295,26 +247,20 @@ def images_view(pid):
     from project import project
     from images import images
 
-    # Get project info
     proj = project()
     proj.getById(pid)
 
-    # Pagination parameters
     page = request.args.get("page", default=1, type=int)
-    per_page = 12  # how many images per page (change if you want)
-
+    per_page = 12 
     db = images()
 
-    # Total images for this project
     count_sql = "SELECT COUNT(*) AS total FROM images WHERE Project_ID = %s"
     db.cur.execute(count_sql, [pid])
     total_row = db.cur.fetchone()
     total_images = total_row["total"] if total_row and "total" in total_row else 0
 
-    # Total pages (at least 1 so template doesn't break)
     total_pages = max(1, (total_images + per_page - 1) // per_page)
 
-    # Clamp page into valid range
     if page < 1:
         page = 1
     elif page > total_pages:
@@ -322,7 +268,6 @@ def images_view(pid):
 
     offset = (page - 1) * per_page
 
-    # Fetch only images for this page, with label status
     sql = """
         SELECT
             i.*,
@@ -348,9 +293,6 @@ def images_view(pid):
 
 
 
-# ---------------------------------------------------------
-#   REGISTER USER
-# ---------------------------------------------------------
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
@@ -375,9 +317,6 @@ def register():
     return render_template("register.html")
 
 
-# ---------------------------------------------------------
-#   SEARCH LABELS + IMAGES + PROJECTS
-# ---------------------------------------------------------
 @app.route("/search", methods=["GET", "POST"])
 def search():
     if not checkSession(): return redirect("/login")
@@ -420,9 +359,6 @@ def search():
                            me=session["user"])
 
 
-# ---------------------------------------------------------
-#   EDIT LABEL
-# ---------------------------------------------------------
 @app.route("/labels/edit/<int:lid>", methods=["GET", "POST"])
 def edit_label(lid):
     if not checkSession(): return redirect("/login")
@@ -463,10 +399,6 @@ def edit_label(lid):
         }
     )
 
-
-# ---------------------------------------------------------
-#   DELETE LABEL (ADMIN)
-# ---------------------------------------------------------
 @app.route("/labels/delete/<int:lid>")
 def delete_label(lid):
     if not checkSession(): return redirect("/login")
@@ -480,9 +412,7 @@ def delete_label(lid):
     return render_template("ok_dialog.html", msg="Label deleted.")
 
 
-# ---------------------------------------------------------
-#   ANNOTATE (GET)
-# ---------------------------------------------------------
+
 @app.route('/annotate/project/<pid>')
 def annotate_project(pid):
     if not checkSession():
@@ -491,11 +421,9 @@ def annotate_project(pid):
     from images import images
     from project import project
 
-    # Get project details
     proj = project()
     proj.getById(pid)
 
-    # Find next unlabeled image
     db = images()
     sql = """
         SELECT i.* FROM images i
@@ -522,9 +450,7 @@ def annotate_project(pid):
 
 
 
-# ---------------------------------------------------------
-#   ANNOTATE SAVE (POST)
-# ---------------------------------------------------------
+
 @app.route('/annotate/save', methods=['POST'])
 def annotate_save():
     if not checkSession():
@@ -538,7 +464,7 @@ def annotate_save():
     description = request.form.get("description")
     uid = session["user"]["UID"]
 
-    # Create NEW label only (annotation workflow)
+    
     lbl = label()
     lbl.set({
         "L_Name": label_name,
@@ -548,13 +474,9 @@ def annotate_save():
     })
     lbl.insert()
 
-    # Load next image automatically
     return redirect(f"/annotate/project/{project_id}")
 
 
-# ---------------------------------------------------------
-#   GLOBAL ANNOTATION DASHBOARD
-# ---------------------------------------------------------
 @app.route("/annotate")
 def annotate_dashboard():
     if not checkSession(): 
@@ -595,7 +517,6 @@ def annotate_dashboard():
 
 import csv
 from flask import make_response, jsonify
-#__________ ------------------------------------------------
 @app.route("/export/all/csv")
 def export_all_csv():
     if not checkSession():
@@ -619,7 +540,6 @@ def export_all_csv():
     db.cur.execute(sql)
     rows = db.cur.fetchall()
 
-    # WRITE CSV TO MEMORY
     output = io.StringIO()
     writer = csv.writer(output)
 
@@ -638,7 +558,6 @@ def export_all_csv():
     csv_data = output.getvalue()
     output.close()
 
-    # SEND AS DOWNLOAD
     response = make_response(csv_data)
     response.headers["Content-Disposition"] = "attachment; filename=all_labels.csv"
     response.headers["Content-Type"] = "text/csv"
@@ -694,7 +613,6 @@ def export_project_csv(pid):
 
 
 
-#_--------------------------------------------------------
 @app.route("/export/project/<pid>/json")
 def export_project_json(pid):
     from label import label
@@ -718,7 +636,6 @@ def export_project_json(pid):
     return jsonify(rows)
 
 
-#_______________download JSON for all labels--------------------------
 import zipfile
 import io
 import csv
@@ -730,12 +647,10 @@ def export_project_zip(pid):
     from images import images
     from label import label
 
-    # Get project name
     proj = project()
     proj.getById(pid)
     proj_name = proj.data[0]["Project_name"]
 
-    # FETCH IMAGE + LABEL DATA
     sql = """
         SELECT l.Label_ID, l.L_Name, l.Description,
                i.Image_ID, i.Image_path,
@@ -752,14 +667,10 @@ def export_project_zip(pid):
     db.cur.execute(sql, [pid])
     rows = db.cur.fetchall()
 
-    # Memory buffer for ZIP
     memory_file = io.BytesIO()
 
     with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
 
-        # -------------------------------
-        # 1. ADD CSV FILE
-        # -------------------------------
         csv_buffer = io.StringIO()
         writer = csv.writer(csv_buffer)
         writer.writerow(["Label_ID", "Label", "Description", "Image", "Project", "User"])
@@ -776,9 +687,7 @@ def export_project_zip(pid):
 
         zf.writestr("labels.csv", csv_buffer.getvalue())
 
-        # -------------------------------
-        # 2. ADD IMAGES
-        # -------------------------------
+        
         for r in rows:
             img_path = r["Image_path"]
 
@@ -787,7 +696,6 @@ def export_project_zip(pid):
                     image_bytes = img_file.read()
                 filename_only = img_path.split("/")[-1]
 
-                # Save inside /images/ folder in ZIP
                 zf.writestr(f"images/{filename_only}", image_bytes)
 
     memory_file.seek(0)
@@ -797,9 +705,7 @@ def export_project_zip(pid):
         download_name=f"{proj_name}_dataset.zip",
         as_attachment=True
     )
-#---------------------------------------------------------
-#   dashboard admin
-#---------------------------------------------------------
+
 @app.route("/admin/dashboard")
 def admin_dashboard():
     if not checkSession():
@@ -825,9 +731,6 @@ def admin_dashboard():
         freq=freq
     )
 
-# ---------------------------------------------------------
-#   SESSION CHECK
-# ---------------------------------------------------------
 def checkSession():
     if "active" in session:
         if time.time() - session["active"] > 500:
@@ -837,8 +740,6 @@ def checkSession():
     return False
 
 
-# ---------------------------------------------------------
-#   RUN
-# ---------------------------------------------------------
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
